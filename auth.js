@@ -49,7 +49,7 @@ form.addEventListener('submit', async event => {
     if (mode === 'signup') {
       const { data, error } = await sb.auth.signUp({
         email, password,
-        options: { data: { display_name: nameInput.value.trim() } }
+        options: { data: { display_name: nameInput.value.trim() }, emailRedirectTo: window.location.origin }
       });
       if (error) throw error;
       if (!data.session) {
