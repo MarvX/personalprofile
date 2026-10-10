@@ -205,7 +205,7 @@ async function openAdminPanel() {
   }
   const list = panel.querySelector('#adminUserList');
   list.innerHTML = profiles.map(p => '<div class="admin-user"><div><strong>' + esc(p.display_name || 'بدون نام') + '</strong><small>' + esc(p.account_status) + ' · ' + esc(new Date(p.created_at).toLocaleDateString('fa-IR')) + '</small></div><div class="admin-actions">' +
-    (p.account_status !== 'approved' ? '<button class="primary" data-user="' + esc(p.id) + '" data-status="approved">تأیید</button>' : '<button class="secondary" data-user="' + esc(p.id) + '" data-status="suspended">تعلیق</button>') +
+    (p.id === currentUserId ? '<span class="tag">حساب فعلی</span>' : (p.account_status !== 'approved' ? '<button class="primary" data-user="' + esc(p.id) + '" data-status="approved">تأیید</button>' : '<button class="secondary" data-user="' + esc(p.id) + '" data-status="suspended">تعلیق</button>')) +
     (p.role !== 'admin' ? '' : '<span class="tag">مدیر</span>') + '</div></div>').join('') || '<p class="empty">هنوز کاربری ثبت‌نام نکرده.</p>';
   list.querySelectorAll('[data-user]').forEach(button => button.addEventListener('click', async () => {
     if (!confirm('وضعیت این حساب تغییر کند؟')) return;
