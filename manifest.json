@@ -1,0 +1,11 @@
+{
+  "name": "احسان | فضای شخصی من",
+  "short_name": "احسان",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f5ef",
+  "theme_color": "#edf1e7",
+  "description": "داشبورد شخصی برای مدیریت زندگی"
+}
