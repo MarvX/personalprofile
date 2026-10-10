@@ -14,9 +14,52 @@
 .intro{color:var(--muted);font-size:13px;margin:0 0 20px}.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.tile{padding:22px;background:var(--panel);border:1px solid var(--line);border-radius:22px;text-align:right;color:var(--text)}.tile .tile-icon{font-size:25px;display:block;margin-bottom:14px}.tile h3{margin:0 0 5px;font-size:15px}.tile p{margin:0;color:var(--muted);font-size:12px}.tile .secondary{margin-top:15px}.setting-row{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:14px 0;border-bottom:1px solid var(--line)}.setting-row:last-child{border:0}.setting-row strong{font-size:12px}.setting-row p{margin:2px 0 0;color:var(--muted);font-size:11px}.empty{padding:20px;text-align:center;color:var(--muted);font-size:12px}.mobile-menu{display:none}.footnote{font-size:10px;color:var(--muted);text-align:center;margin-top:20px}.modal-backdrop{position:fixed;inset:0;background:#12191473;z-index:10;display:none;align-items:center;justify-content:center;padding:18px}.modal-backdrop.open{display:flex}.modal{width:min(460px,100%);background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:0 24px 70px #0002}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modal-head h3{margin:0;font-size:17px}.modal-head button{border:0;background:transparent;color:var(--muted);font-size:23px}.form-row{display:grid;gap:6px;margin-bottom:13px}.form-row label{font-size:12px;font-weight:700}.form-row input,.form-row select,.form-row textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:12px;padding:11px 12px}.toast{position:fixed;bottom:22px;left:22px;z-index:20;background:var(--text);color:var(--panel);padding:12px 18px;border-radius:13px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s;font-size:12px}.toast.show{opacity:1;transform:translateY(0)}
 @media(max-width:1100px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.content-grid{grid-template-columns:1fr}.content-grid .stack:last-child{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}}
 @media(max-width:760px){.app{display:block}.sidebar{position:fixed;z-index:8;top:0;bottom:0;right:0;width:270px;height:100dvh;transform:translateX(105%);transition:transform .25s;box-shadow:var(--shadow)}.sidebar.open{transform:translateX(0)}.main{padding:20px 15px 35px}.mobile-menu{display:inline-flex}.topbar{margin-bottom:19px}.top-actions .primary{padding:9px 11px;font-size:12px}.greeting{padding:20px;align-items:flex-start;flex-direction:column}.greeting h2{font-size:20px}.stats{gap:9px}.stat{padding:13px}.stat-value{font-size:22px}.stat-top{font-size:10px}.content-grid .stack:last-child{grid-template-columns:1fr}.tiles{grid-template-columns:1fr}.card{padding:16px}}
+
+/* Authentication gate and account management */
+.auth-locked .app,.auth-locked .footnote{visibility:hidden;pointer-events:none}
+.auth-gate{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:var(--bg);overflow:auto}
+.auth-gate[hidden]{display:none}
+.auth-card{width:min(460px,100%);background:var(--panel);border:1px solid var(--line);border-radius:26px;padding:clamp(22px,5vw,34px);box-shadow:var(--shadow)}
+.auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.auth-brand .brand-mark{flex:none}
+.auth-card h2{font-size:22px;margin:0 0 5px}
+.auth-card p{color:var(--muted);font-size:12px;margin:0 0 18px}
+.auth-card .form-row{margin-bottom:14px}
+.auth-card input{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:12px;padding:12px}
+.auth-message{min-height:22px;color:var(--deep);font-size:12px;margin:10px 0}
+.auth-message[data-error=true]{color:#c45b51}
+.auth-actions{display:grid;gap:9px}
+.auth-status-panel{background:var(--soft);border:1px solid var(--line);padding:17px;border-radius:17px}
+.auth-status-panel h3{margin:0 0 8px;font-size:17px}
+.auth-status-panel p{margin:0 0 16px}
+.auth-disclaimer{font-size:10px!important;line-height:1.8;margin-top:17px!important}
+.admin-modal{max-height:85vh;overflow:auto}
+.admin-user{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.admin-user strong{display:block;font-size:12px}
+.admin-user small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
+.admin-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.admin-actions button{padding:6px 10px;font-size:11px}
+
 </style>
 </head>
-<body><div class="app">
+<body class="auth-locked">
+<div class="auth-gate" id="authGate">
+  <section class="auth-card">
+    <div class="auth-brand"><div class="brand-mark">ا</div><div><strong>احسان</strong><div class="subtle">فضای شخصی امن</div></div></div>
+    <form id="authForm">
+      <h2>ورود به فضای شخصی</h2>
+      <p>اطلاعاتت بعد از ورود در حساب خودت ذخیره می‌شوند و از داده‌های دیگر کاربران جدا هستند.</p>
+      <div class="form-row" id="authNameRow" hidden><label for="authName">نام نمایشی</label><input id="authName" autocomplete="name" maxlength="80" placeholder="اسم دلخواهت"></div>
+      <div class="form-row"><label for="authEmail">ایمیل</label><input id="authEmail" type="email" required autocomplete="email" placeholder="you@example.com"></div>
+      <div class="form-row"><label for="authPassword">رمز عبور</label><input id="authPassword" type="password" required minlength="8" autocomplete="current-password" placeholder="حداقل ۸ کاراکتر"></div>
+      <div class="auth-message" id="authMessage" role="status"></div>
+      <div class="auth-actions"><button class="primary" id="authSubmit" type="submit">ورود به حساب</button><button class="secondary" id="authSwitch" type="button">حساب ندارم؛ ثبت‌نام</button></div>
+    </form>
+    <div class="auth-status-panel" id="authStatus" hidden><h3 id="authStatusTitle"></h3><p id="authStatusCopy"></p><button class="secondary" id="authSignOut" type="button">خروج از حساب</button></div>
+    <p class="auth-disclaimer">ثبت‌نام به معنی فعال‌شدن فوری حساب نیست. دسترسی به اطلاعات شخصی بعد از تأیید مدیر فعال می‌شود. کلید استفاده‌شده در مرورگر، کلید عمومی Supabase است؛ کلید محرمانه‌ی مدیریتی در سایت قرار ندارد.</p>
+  </section>
+</div>
+<div class="app">
 <aside class="sidebar" id="sidebar"><div class="brand"><div class="brand-mark">ا</div><div><h1>احسان</h1><p>فضای شخصی من</p></div></div>
 <div><div class="nav-label">فضای شخصی</div><nav class="nav" id="nav">
 <button class="active" data-page="today"><span class="ico">⌂</span>امروز من</button><button data-page="tasks"><span class="ico">☑</span>وظایف و عادت‌ها</button><button data-page="goals"><span class="ico">◎</span>هدف‌ها و پیشرفت</button><button data-page="calendar"><span class="ico">▦</span>تقویم</button></nav>
@@ -31,7 +74,7 @@ const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll
 const initial={theme:'light',page:'today',tasks:[{id:1,title:'برنامه روزم رو مرور کنم',category:'شخصی',when:'صبح',priority:'مهم',done:false},{id:2,title:'تمرین باشگاه',category:'ورزش',when:'طبق برنامه تمرینی',priority:'معمولی',done:false},{id:3,title:'۱۰ واژه انگلیسی مرور کنم',category:'زبان',when:'۱۵ دقیقه',priority:'معمولی',done:false},{id:4,title:'یک قدم برای پیشرفت معماری',category:'معماری',when:'امروز',priority:'مهم',done:false}],habits:[{id:1,title:'ورزش',icon:'🏋️',done:false},{id:2,title:'انگلیسی',icon:'📚',done:false},{id:3,title:'مطالعه',icon:'📖',done:false},{id:4,title:'خواب کافی',icon:'🌙',done:false}],goals:[{id:1,title:'افزایش درآمد',detail:'هدف مالی شخصی',progress:15},{id:2,title:'پیشرفت در معماری',detail:'مهارت و پروژه‌ها',progress:20},{id:3,title:'تقویت زبان انگلیسی',detail:'واژگان و تمرین روزانه',progress:10}],words:0,pages:0};
 let state;try{state=Object.assign({},initial,JSON.parse(localStorage.getItem(key)||'{}'))}catch(e){state=JSON.parse(JSON.stringify(initial))}
 state.tasks=Array.isArray(state.tasks)?state.tasks:initial.tasks;state.habits=Array.isArray(state.habits)?state.habits:initial.habits;state.goals=Array.isArray(state.goals)?state.goals:initial.goals;
-function save(){localStorage.setItem(key,JSON.stringify(state))}
+function save(){localStorage.setItem(key,JSON.stringify(state));window.dispatchEvent(new CustomEvent('ehsan-state-saved',{detail:JSON.parse(JSON.stringify(state))}))}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function toast(s){let t=$('#toast');t.textContent=s;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2400)}
 function dateText(){try{return new Intl.DateTimeFormat('fa-IR',{weekday:'long',day:'numeric',month:'long'}).format(new Date())}catch(e){return 'امروز'}}
@@ -84,6 +127,6 @@ if(x=e.target.closest('#aiSend'))toast('اتصال هوش مصنوعی در مر
 $('#content').addEventListener('change',e=>{let x=e.target.closest('[data-check]');if(x){let t=state.tasks.find(t=>t.id===Number(x.dataset.check));if(t)t.done=x.checked;save();render()}});
 $('#addTaskBtn').addEventListener('click',openModal);$('#closeModal').addEventListener('click',closeModal);$('#modal').addEventListener('click',e=>{if(e.target===$('#modal'))closeModal()});$('#taskForm').addEventListener('submit',e=>{e.preventDefault();state.tasks.unshift({id:Date.now(),title:$('#taskName').value.trim(),category:$('#taskCategory').value,when:$('#taskWhen').value.trim(),priority:$('#priority').value,done:false});save();closeModal();render();toast('کار جدید ذخیره شد.')});
 $('#themeBtn').addEventListener('click',toggleTheme);$('#themeSide').addEventListener('click',toggleTheme);$('#menuBtn').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
-render();if('serviceWorker'in navigator&&location.protocol!=='file:')window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+window.__ehsanGetState=()=>JSON.parse(JSON.stringify(state));window.__ehsanLoadState=(incoming)=>{if(!incoming||typeof incoming!=='object')return;state=Object.assign({},initial,incoming);state.tasks=Array.isArray(state.tasks)?state.tasks:[];state.habits=Array.isArray(state.habits)?state.habits:[];state.goals=Array.isArray(state.goals)?state.goals:[];save();render()};render();if('serviceWorker'in navigator&&location.protocol!=='file:')window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 })();
-</script></body></html>
+</script><script src="./supabase-config.js"></script><script type="module" src="./auth.js"></script></body></html>
