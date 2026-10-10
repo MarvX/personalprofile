@@ -209,10 +209,9 @@ async function openAdminPanel() {
     (p.role !== 'admin' ? '' : '<span class="tag">مدیر</span>') + '</div></div>').join('') || '<p class="empty">هنوز کاربری ثبت‌نام نکرده.</p>';
   list.querySelectorAll('[data-user]').forEach(button => button.addEventListener('click', async () => {
     if (!confirm('وضعیت این حساب تغییر کند؟')) return;
-    const { error: updateError } = await sb.rpc('admin_set_account_status', {
-      target_user_id: button.dataset.user,
-      new_status: button.dataset.status
-    });
+    const { error: updateError } = await sb.from('profiles')
+      .update({ account_status: button.dataset.status, updated_at: new Date().toISOString() })
+      .eq('id', button.dataset.user);
     if (updateError) { alert('تغییر وضعیت انجام نشد: ' + updateError.message); return; }
     await openAdminPanel();
   }));
