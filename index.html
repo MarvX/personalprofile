@@ -40,6 +40,42 @@
 .admin-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .admin-actions button{padding:6px 10px;font-size:11px}
 
+
+/* Dedicated visual identities for each life module */
+body[data-page="fitness"]{--bg:#101713;--panel:#1b2720;--soft:#25392b;--text:#edf7ed;--muted:#9caf9e;--line:#344a38;--accent:#b8f34b;--deep:#d1ff80;--peach:#39432a}
+body[data-page="fitness"] .brand-mark,body[data-page="fitness"] .primary{background:#b8f34b;color:#17210f;border-color:#b8f34b}
+body[data-page="fitness"] .main{background:radial-gradient(ellipse at 90% 0%,#263d2b 0,transparent 38%),var(--bg)}
+body[data-page="fitness"] .page-title{letter-spacing:-.6px}
+body[data-page="fitness"] .card,body[data-page="fitness"] .tile{border-radius:12px;border-color:#344a38}
+body[data-page="fitness"] .tile-icon{display:inline-grid;place-items:center;width:48px;height:48px;border-radius:14px;background:#30492b}
+body[data-page="finance"]{--bg:#f1f4f8;--panel:#fff;--soft:#e7edf7;--text:#142c4b;--muted:#73849b;--line:#dbe4ef;--accent:#2563eb;--deep:#1747a6;--peach:#fff0d8}
+body[data-page="finance"] .main{background:linear-gradient(135deg,#f1f4f8,#f8faff)}
+body[data-page="finance"] .card,body[data-page="finance"] .stat,body[data-page="finance"] .tile{border-radius:14px;box-shadow:0 8px 25px #16345a0b}
+body[data-page="finance"] .stat-value{font-variant-numeric:tabular-nums}
+body[data-page="finance"] .stat-icon{background:#e7efff;color:#2563eb}
+body[data-page="partner"]{--bg:#fff5f5;--panel:#fffdfd;--soft:#ffe7eb;--text:#552c40;--muted:#a17b8c;--line:#f2d8e1;--accent:#d85b86;--deep:#a83e67;--peach:#ffe0d4}
+body[data-page="partner"] .greeting{background:linear-gradient(120deg,#ffe4ed,#fff0e7);border-color:#f7d2df}
+body[data-page="partner"] .card,body[data-page="partner"] .tile{border-radius:26px;box-shadow:0 14px 34px #b85b7710}
+body[data-page="partner"] .tile-icon{display:inline-grid;place-items:center;width:48px;height:48px;border-radius:50%;background:#ffe7ee}
+body[data-page="goals"]{--bg:#f4f0ff;--panel:#fff;--soft:#ebe4ff;--text:#342657;--muted:#877ca7;--line:#e1d8f6;--accent:#8063d8;--deep:#5f46ae;--peach:#fce7d7}
+body[data-page="goals"] .card,body[data-page="goals"] .tile{border-radius:24px}
+body[data-page="goals"] .fill{background:linear-gradient(90deg,#9b83ef,#6f55cb)}
+body[data-page="tasks"]{--bg:#f2f7f5;--panel:#fff;--soft:#e2f0eb;--text:#203d36;--muted:#78918a;--line:#d8e8e2;--accent:#2d8b72;--deep:#236c58;--peach:#fbe8d8}
+body[data-page="tasks"] .task{border-radius:12px}
+body[data-page="calendar"]{--bg:#f6f4ef;--panel:#fffefa;--soft:#eee9df;--text:#39362f;--muted:#8a8377;--line:#e7e0d4;--accent:#b77942;--deep:#8e5c30;--peach:#f5e3d2}
+body[data-page="calendar"] .tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+body[data-page="calendar"] .tile{min-height:145px;border-radius:14px}
+body[data-page="work"]{--bg:#edf2f8;--panel:#fff;--soft:#dfe9f5;--text:#20334c;--muted:#75869c;--line:#d8e2ee;--accent:#436d9e;--deep:#2c527e;--peach:#f7e5ce}
+body[data-page="work"] .tile{border-radius:12px;border-top:3px solid var(--accent)}
+body[data-page="learning"]{--bg:#f4f8ed;--panel:#fff;--soft:#e7efd9;--text:#33452a;--muted:#839174;--line:#dfe8d2;--accent:#789448;--deep:#526f2d;--peach:#f5e4d4}
+body[data-page="learning"] .card{max-width:900px;margin-inline:auto;border-radius:28px;padding:clamp(22px,4vw,38px)}
+body[data-page="learning"] .setting-row{padding:20px 0}
+body[data-page="ai"]{--bg:#171728;--panel:#22223a;--soft:#2b2b48;--text:#f2efff;--muted:#aaa8ca;--line:#3b3a5d;--accent:#a18aff;--deep:#c0b3ff;--peach:#49374d}
+body[data-page="ai"] .main{background:radial-gradient(ellipse at 80% 0%,#38305c 0,transparent 40%),var(--bg)}
+body[data-page="ai"] .card{border-radius:26px}
+body[data-page="settings"] .card{max-width:900px}
+@media(max-width:760px){body[data-page="calendar"] .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 </style>
 </head>
 <body class="auth-locked">
@@ -99,7 +135,7 @@ ai:{title:'هوش مصنوعی احسان',intro:'دستیار آینده سای
 settings:{title:'تنظیمات',intro:'تنظیمات حساب و حریم خصوصی پس از اضافه‌شدن بک‌اند تکمیل می‌شوند.',html:()=>card('ظاهر و ترجیحات','<div class="setting-row"><div><strong>حالت روشن / تاریک</strong><p>ظاهر مناسب خودت را انتخاب کن.</p></div><button class="secondary" id="themeSetting">تغییر حالت</button></div><div class="setting-row"><div><strong>تم Sage</strong><p>سبز ملایم و کرم، تم پیش‌فرض سایت.</p></div><span class="tag">فعال</span></div><div class="setting-row"><div><strong>زبان</strong><p>نسخه فعلی فارسی و راست‌چین است؛ انگلیسی در توسعه بعدی.</p></div><span class="tag">فارسی</span></div><div class="setting-row"><div><strong>پشتیبان‌گیری</strong><p>خروجی JSON از داده‌های محلی این نسخه بگیر.</p></div><button class="secondary" id="exportData">خروجی اطلاعات</button></div><div class="setting-row"><div><strong>حذف داده‌های محلی</strong><p>فقط داده‌های همین مرورگر حذف می‌شوند.</p></div><button class="secondary" id="resetData">بازنشانی</button></div>')}
 };
 function tiles(items){return '<div class="tiles">'+items.map(x=>'<div class="tile"><span class="tile-icon">'+x[0]+'</span><h3>'+x[1]+'</h3><p>'+x[2]+'</p><button class="secondary" data-soon="'+x[1]+'">'+x[3]+'</button></div>').join('')+'</div>'}
-function render(){document.documentElement.dataset.theme=state.theme==='dark'?'dark':'light';$('#todayDate').textContent=dateText();$('#pageTitle').textContent=(pages[state.page]&&pages[state.page].title)||'امروز من';$$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===state.page));$('#content').innerHTML=state.page==='today'?dashboard():(pages[state.page]?'<p class="intro">'+pages[state.page].intro+'</p>'+pages[state.page].html():'');$('#sidebar').classList.remove('open')}
+function render(){document.body.dataset.page=state.page;document.documentElement.dataset.theme=state.theme==='dark'?'dark':'light';$('#todayDate').textContent=dateText();$('#pageTitle').textContent=(pages[state.page]&&pages[state.page].title)||'امروز من';$$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===state.page));$('#content').innerHTML=state.page==='today'?dashboard():(pages[state.page]?'<p class="intro">'+pages[state.page].intro+'</p>'+pages[state.page].html():'');$('#sidebar').classList.remove('open')}
 function go(p){state.page=p;save();render();window.scrollTo({top:0,behavior:'smooth'})}
 function openModal(){$('#modal').classList.add('open');setTimeout(()=>$('#taskName').focus(),60)}
 function closeModal(){$('#modal').classList.remove('open');$('#taskForm').reset()}
