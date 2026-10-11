@@ -198,10 +198,51 @@ async function openAdminPanel() {
     panel = document.createElement('div');
     panel.id = 'adminPanel';
     panel.className = 'modal-backdrop open';
-    panel.innerHTML = '<section class="modal admin-modal" role="dialog" aria-modal="true"><div class="modal-head"><h3>مدیریت حساب‌ها</h3><button type="button" id="adminClose">×</button></div><p class="subtle">این صفحه فقط وضعیت حساب‌ها را نشان می‌دهد؛ پیام‌ها و داده‌های خصوصی کاربران نمایش داده نمی‌شوند.</p><div id="adminUserList"></div></section>';
+    panel.innerHTML = '<section class="modal admin-modal" role="dialog" aria-modal="true"><div class="modal-head"><h3>مدیریت حساب‌ها</h3><button type="button" id="adminClose">×</button></div><p class="subtle">از اینجا حساب بساز، دسترسی بده یا حساب‌های در انتظار را تأیید کن. رمز اولیه را امن به کاربر بده و از او بخواه بعداً تغییرش دهد.</p><details open style="margin:14px 0 18px"><summary style="cursor:pointer;font-weight:700;padding:8px 0">＋ افزودن کاربر جدید</summary><form id="adminCreateUserForm" style="padding-top:12px"><div class="form-row"><label for="newUserName">نام نمایشی</label><input id="newUserName" required maxlength="80" placeholder="نام کاربر"></div><div class="form-row"><label for="newUserEmail">ایمیل</label><input id="newUserEmail" type="email" required autocomplete="off" placeholder="user@example.com"></div><div class="form-row"><label for="newUserPassword">رمز اولیه (حداقل ۸ کاراکتر)</label><input id="newUserPassword" type="password" required minlength="8" autocomplete="new-password" placeholder="رمز موقت"></div><div class="form-row"><label for="newUserRole">نوع حساب</label><select id="newUserRole"><option value="user">کاربر عادی</option><option value="admin">مدیر</option></select></div><div class="form-row"><label style="display:flex;align-items:center;gap:8px"><input id="newUserApproved" type="checkbox" style="width:auto"> فعال‌سازی فوری حساب</label></div><div id="adminCreateMessage" class="auth-message" role="status"></div><button class="primary" type="submit" style="width:100%">ساخت حساب</button></form></details><div id="adminUserList"></div></section>';
     document.body.append(panel);
     panel.querySelector('#adminClose').addEventListener('click', () => panel.remove());
     panel.addEventListener('click', e => { if (e.target === panel) panel.remove(); });
+  }
+  const createForm = panel.querySelector('#adminCreateUserForm');
+  if (createForm && !createForm.dataset.bound) {
+    createForm.dataset.bound = 'true';
+    createForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      const button = createForm.querySelector('button[type="submit"]');
+      const msg = panel.querySelector('#adminCreateMessage');
+      button.disabled = true;
+      msg.textContent = 'در حال ساخت حساب…';
+      msg.dataset.error = 'false';
+      try {
+        const { data: sessionData, error: sessionError } = await sb.auth.getSession();
+        if (sessionError || !sessionData.session) throw new Error('نشست ورود پیدا نشد؛ دوباره وارد شو.');
+        const response = await fetch(cfg.url + '/functions/v1/admin-create-user', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': cfg.publishableKey,
+            'Authorization': 'Bearer ' + sessionData.session.access_token
+          },
+          body: JSON.stringify({
+            display_name: panel.querySelector('#newUserName').value.trim(),
+            email: panel.querySelector('#newUserEmail').value.trim(),
+            password: panel.querySelector('#newUserPassword').value,
+            role: panel.querySelector('#newUserRole').value,
+            approved: panel.querySelector('#newUserApproved').checked
+          })
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || 'ساخت حساب انجام نشد.');
+        msg.textContent = 'حساب ساخته شد: ' + (result.user?.email || '');
+        createForm.reset();
+        await openAdminPanel();
+      } catch (error) {
+        msg.textContent = error.message || 'ساخت حساب انجام نشد.';
+        msg.dataset.error = 'true';
+      } finally {
+        button.disabled = false;
+      }
+    });
   }
   const list = panel.querySelector('#adminUserList');
   list.innerHTML = profiles.map(p => '<div class="admin-user"><div><strong>' + esc(p.display_name || 'بدون نام') + '</strong><small>' + esc(p.account_status) + ' · ' + esc(new Date(p.created_at).toLocaleDateString('fa-IR')) + '</small></div><div class="admin-actions">' +
